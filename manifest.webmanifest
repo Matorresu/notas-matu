@@ -1,0 +1,17 @@
+{
+  "name": "Mis Notas MATU",
+  "short_name": "Mis Notas",
+  "description": "Notas sincronizadas y tarjetas de repaso.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f3f6f9",
+  "theme_color": "#173a63",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

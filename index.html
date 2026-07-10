@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#173a63">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Mis Notas">
+  <title>Mis Notas MATU</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <p class="eyebrow">HERRAMIENTA DE ESTUDIO</p>
+      <h1>Mis Notas MATU</h1>
+    </div>
+    <div class="header-actions">
+      <span id="syncBadge" class="sync-badge">Sin conexión</span>
+      <button id="themeBtn" class="icon-btn" aria-label="Cambiar tema">◐</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="authCard" class="card auth-card">
+      <div class="auth-icon">☁</div>
+      <h2>Sincronice sus notas</h2>
+      <p>Inicie sesión con la misma cuenta de Google en el teléfono y la computadora.</p>
+      <button id="loginBtn" class="google-btn" type="button">
+        <span class="google-g">G</span>
+        Continuar con Google
+      </button>
+      <p id="authError" class="error-message hidden"></p>
+    </section>
+
+    <div id="appArea" class="hidden">
+      <section class="user-bar card compact">
+        <div class="user-info">
+          <img id="userPhoto" class="avatar hidden" alt="">
+          <div>
+            <strong id="userName"></strong>
+            <small id="userEmail"></small>
+          </div>
+        </div>
+        <button id="logoutBtn" class="secondary small" type="button">Cerrar sesión</button>
+      </section>
+
+      <section id="migrationCard" class="card warning-card hidden">
+        <h2>Notas anteriores encontradas</h2>
+        <p id="migrationText"></p>
+        <div class="form-actions">
+          <button id="migrateBtn" class="primary" type="button">Subirlas a Firebase</button>
+          <button id="dismissMigration" class="secondary" type="button">Ahora no</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 id="formTitle">Nueva nota</h2>
+        <form id="noteForm">
+          <input type="hidden" id="noteId">
+          <label>Materia o categoría
+            <input id="category" maxlength="60" placeholder="Ejemplo: Contabilidad" required>
+          </label>
+          <label>Título
+            <input id="title" maxlength="120" placeholder="Ejemplo: NIIF 9" required>
+          </label>
+          <label>Contenido
+            <textarea id="content" rows="6" maxlength="5000" placeholder="Escriba o use el dictado del teclado del iPhone..." required></textarea>
+          </label>
+          <label>Etiquetas
+            <input id="tags" maxlength="160" placeholder="Ejemplo: examen, capítulo 2">
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="primary">Guardar nota</button>
+            <button type="button" id="cancelEdit" class="secondary hidden">Cancelar</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="stats" aria-label="Resumen">
+        <div><strong id="totalNotes">0</strong><span>Notas</span></div>
+        <div><strong id="learnedNotes">0</strong><span>Aprendidas</span></div>
+        <div><strong id="pendingNotes">0</strong><span>Pendientes</span></div>
+      </section>
+
+      <section class="card">
+        <div class="section-head">
+          <h2>Listado</h2>
+          <button id="reviewBtn" class="primary small" type="button">Repasar</button>
+        </div>
+
+        <div class="filters">
+          <input id="search" type="search" placeholder="Buscar...">
+          <select id="categoryFilter">
+            <option value="">Todas las categorías</option>
+          </select>
+          <select id="statusFilter">
+            <option value="">Todos los estados</option>
+            <option value="pending">Pendientes</option>
+            <option value="learned">Aprendidas</option>
+          </select>
+        </div>
+
+        <div id="loadingState" class="empty">Cargando notas...</div>
+        <div id="notesList" class="notes-list"></div>
+        <p id="emptyState" class="empty hidden">Todavía no hay notas. Cree la primera arriba.</p>
+      </section>
+
+      <section class="card">
+        <h2>Respaldo y descarga</h2>
+        <p class="muted">Las notas se sincronizan con Firebase. También puede guardar una copia local.</p>
+        <div class="export-grid">
+          <button id="exportCsv" class="secondary" type="button">Descargar CSV</button>
+          <button id="exportJson" class="secondary" type="button">Descargar respaldo</button>
+          <label class="file-label">Importar respaldo
+            <input id="importJson" type="file" accept=".json,application/json">
+          </label>
+          <button id="clearAll" class="danger" type="button">Borrar todas</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <dialog id="reviewDialog">
+    <div class="review-wrap">
+      <div class="section-head">
+        <h2>Modo repaso</h2>
+        <button id="closeReview" class="icon-btn" aria-label="Cerrar">×</button>
+      </div>
+      <p id="reviewProgress" class="muted"></p>
+      <article class="flashcard">
+        <p class="eyebrow" id="reviewCategory"></p>
+        <h3 id="reviewTitle"></h3>
+        <div id="reviewContent" class="review-content hidden"></div>
+        <button id="showAnswer" class="primary" type="button">Mostrar contenido</button>
+      </article>
+      <div class="review-actions">
+        <button id="prevCard" class="secondary" type="button">Anterior</button>
+        <button id="toggleLearned" class="secondary" type="button">Marcar aprendida</button>
+        <button id="nextCard" class="primary" type="button">Siguiente</button>
+      </div>
+    </div>
+  </dialog>
+
+  <template id="noteTemplate">
+    <article class="note">
+      <div class="note-top">
+        <div>
+          <span class="pill note-category"></span>
+          <h3 class="note-title"></h3>
+        </div>
+        <span class="status"></span>
+      </div>
+      <p class="note-content"></p>
+      <p class="note-tags"></p>
+      <small class="note-date"></small>
+      <div class="note-actions">
+        <button class="learn secondary small" type="button"></button>
+        <button class="edit secondary small" type="button">Editar</button>
+        <button class="delete danger small" type="button">Eliminar</button>
+      </div>
+    </article>
+  </template>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
