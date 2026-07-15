@@ -1,4 +1,4 @@
-const CACHE = "mis-notas-firebase-v2-1";
+const CACHE = "mis-notas-firebase-v2-2";
 const ASSETS = ["./","./index.html","./styles.css","./app.js","./manifest.webmanifest","./icon.svg"];
 self.addEventListener("install", event => {
   self.skipWaiting();
