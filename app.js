@@ -38,7 +38,13 @@ const $ = id => document.getElementById(id);
 const form = $("noteForm");
 const list = $("notesList");
 const template = $("noteTemplate");
+const imageInput = $("noteImage");
+const imagePreview = $("imagePreview");
+const imagePreviewContainer = $("imagePreviewContainer");
+const removeImageButton = $("removeImage");
+const contentInput = $("content");
 
+let selectedImage = null;
 function notesCollection() {
   if (!currentUser) throw new Error("No hay una sesión activa.");
   return collection(db, "usuarios", currentUser.uid, "notas");
