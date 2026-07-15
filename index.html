@@ -68,6 +68,27 @@
             <input id="title" maxlength="120" placeholder="Ejemplo: NIIF 9" required>
           </label>
           <label>Contenido
+            <div class="image-field">
+  <label for="noteImage">Imagen de la nota</label>
+
+  <input
+    type="file"
+    id="noteImage"
+    accept="image/jpeg,image/png,image/webp"
+  >
+
+  <div id="imagePreviewContainer" class="image-preview-container" hidden>
+    <img
+      id="imagePreview"
+      class="image-preview"
+      alt="Vista previa de la imagen"
+    >
+
+    <button type="button" id="removeImage">
+      Quitar imagen
+    </button>
+  </div>
+</div>
             <textarea id="content" rows="6" maxlength="5000" placeholder="Escriba o use el dictado del teclado del iPhone..." required></textarea>
           </label>
           <label>Etiquetas
